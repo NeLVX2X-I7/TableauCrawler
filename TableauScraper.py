@@ -23,24 +23,21 @@ n=2
 def crawlerTableauGallery(pages):
     try:
         driver=webdriver.Chrome()
-        #driver.get('https://public.tableau.com/en-gb/gallery/?tab=viz-of-the-day&type=viz-of-the-day')
-        #review =driver.find_element_by_class_name("l-inner")
-        #review =driver.find_elements_by_class_name("gallery-list-item-container")
-        #review=driver.find_element_by_class_name("l-inner")
-        
-        wait = WebDriverWait(driver, 20)
-    
-        #second=wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'pagination-container')))
-        #pages=second.find_elements_by_tag_name('li')
+
+       
+  
+  
         j=1
-        #pages=second.find_element_by_class_name("pagination")
+        #loop throug the given No of pages
         while(j<pages+1):
             driver.get('https://public.tableau.com/en-gb/gallery/?tab=viz-of-the-day&type=viz-of-the-day&page='+str(j))
             wait = WebDriverWait(driver, 20)
+            #wait until all elements are loaded
             first=wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'gallery-items-list')))   
             images=first.find_elements_by_tag_name('li')  
             c=1
             file2write=open("GalleryText",'w')
+            #loop through all images on a page
             for i in images:
                container= i.find_element_by_class_name("gallery-list-item-container")   
                imagesrc=container.find_element_by_xpath('//*[@id="gallery-page-container"]/div/div/div[2]/section/div/ol/li['+str(c)+']/div/div[1]')
@@ -61,12 +58,3 @@ def crawlerTableauGallery(pages):
         
 
 crawlerTableauGallery(1)
-#c=0
-#for r in review:
-#    print(c,'+',r)    
-#    c+=1                       
-                                            
-#allProducts =  driver.find_elements(By.CSS_SELECTOR,"#gallery-items-list li")
-
-#for p in allProducts:
-   # print(p)
