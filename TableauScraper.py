@@ -91,10 +91,11 @@ def main():
     wrong=True   
     while(wrong):
         number=input('Type Range of pages you want to scrape from (e.g:2-4, 1-1): ')
+        path=input('Give a path:')
         rangePage=number.split('-')
         print(rangePage[0])
         try:
-            crawlerTableauGallery(int(rangePage[0]),int(rangePage[1]),'C:\\Users\\Nelusa\\Documents\\Uni\\Master\\HiWi\\CrawlerTableau\\TableauCrawler')   
+            crawlerTableauGallery(int(rangePage[0]),int(rangePage[1]),path)   
             wrong=False
         except ValueError:
             print("Typing mistake")
