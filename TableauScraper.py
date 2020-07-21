@@ -105,7 +105,7 @@ def main():
                 crawlerTableauGallery(int(rangePage[0]),int(rangePage[1]),path)   
                 wrong=False
         except ValueError:
-            print("Typing mistake")
+            print("Typing mistake!")
             
 main()           
 
