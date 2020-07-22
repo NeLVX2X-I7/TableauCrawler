@@ -7,7 +7,7 @@ Created on Wed Jun  3 21:01:36 2020
 @author: Nelusa
 """
 import sys
-
+from sys import argv
 #from selenium import webdriver
 import os
 from TableauWorkBooks import WorkBook
@@ -87,21 +87,29 @@ def crawlerTableauGallery(j,pages,path):
     finally:
         driver.quit()
      
+     
 def main():
     wrong=True   
     ispath=False
     while(wrong and not ispath):
-        number=input('Type Range of pages you want to scrape from (e.g:2-4, 1-1): ')
-        path=input('Give a path:')
+        #number=input('Type Range of pages you want to scrape from (e.g:2-4, 1): ')
+        #path=input('Give a path:')
+        number=argv[1]
+        path=argv[2]
         ispath=os.path.isdir(path)
         
             
         rangePage=number.split('-')
-        print(rangePage[0])
+       
         try:
             if(not ispath):
                 print("Path does not exist!")
             else:
+                if(len(rangePage)==1):
+                    rangePage.append(rangePage[0])
+                    print(rangePage[1])
+                    #rangePage[1]==rangePage[0]
+                    rangePage[0]==1
                 crawlerTableauGallery(int(rangePage[0]),int(rangePage[1]),path)   
                 wrong=False
         except ValueError:
