@@ -110,6 +110,9 @@ def main():
                     print(rangePage[1])
                     #rangePage[1]==rangePage[0]
                     rangePage[0]==1
+                elif(len(rangePage)==1):
+                    rangePage.append(1)
+                    rangePage.append(10)
                 crawlerTableauGallery(int(rangePage[0]),int(rangePage[1]),path)   
                 wrong=False
         except ValueError:
