@@ -21,9 +21,11 @@ from selenium.common.exceptions import StaleElementReferenceException
 import random
 import time
 import re
+import numpy
 c=0
 n=2
-def crawlerTableauGallery(j,pages,path):
+
+def crawlerTableauGallery(j,pages,path,WithWB):
     try:
         driver=webdriver.Chrome()
 
@@ -79,53 +81,73 @@ def crawlerTableauGallery(j,pages,path):
                    file2write.write(img_name+':'+imgTitel+'\n')
                    file2write.write(titleText+'\n')    
                    file2write.close()
-                   WorkBook(reference,save_path)
+               
+                   if(WithWB):
+                       WorkBook(reference,save_path)
+                   
                except OSError:
                    print('Already Exists')
-              
+               
             j+=1                     
     finally:
-        driver.quit()
+        #driver.quit()
+        driver.close()
+        print("end")
      
-     
+def is_number_tryexcept(s):
+    """ Returns True is string is a number. """
+    try:
+        rangePage=s.split('-')
+        for i in rangePage:
+            int(i)
+        return True
+    except ValueError:
+        return False     
 def main():
     wrong=True   
     ispath=False
-  
+    WithWB=False
     #number=input('Type Range of pages you want to scrape from (e.g:2-4, 1): ')
     #path=input('Give a path:')
-    if(len(argv)==3):
-        number=argv[1]
-        path=argv[2]
-    elif(len(argv)==2):
-        if(os.path.isdir(argv[1])):
-            number="10"
-            path=argv[1]
+    print(len(argv))
+    for i in range(1,len(argv)+1):
+        if(argv[i-1]=="True"):
+            WithWB=True
+            #isinstance(argv[i-1],(int))
+        elif(is_number_tryexcept(argv[i-1])):
+            number=argv[i-1]
+        elif(os.path.isdir(argv[i-1])):
+            path=argv[i-1]
         else:
-            number=argv[1]
             path=os.path.abspath(os.getcwd())
-    else:
-        path=os.path.abspath(os.getcwd())
-        print(path)
-        number="10"
+            #print(path)
+            number="10"
+        
+
         
    # ispath=os.path.isdir(path)
     
         
     rangePage=number.split('-')
-   
+    
     try:
         
       
-        if(len(rangePage)==1):
-            rangePage.append(rangePage[0])
-            print(rangePage[1])
-            #rangePage[1]==rangePage[0]
-            rangePage[0]==1
+        if(len(rangePage)==1 and not rangePage[0]=="10"):
+            #rangePage.insert(10)
+            print(len(rangePage))
+            last=rangePage[0]
+           # rangePage.append(rangePage[0])
+            #print(rangePage[1])
+            #rangePage[1]==last
+            rangePage.insert(0,1)
+            rangePage.append(last)
         elif(len(rangePage)==1):
-            rangePage.append(1)
+            
+            rangePage.insert(0,1)
             rangePage.append(10)
-        crawlerTableauGallery(int(rangePage[0]),int(rangePage[1]),path)   
+        print("Page",rangePage[0],rangePage[1])    
+        crawlerTableauGallery(int(rangePage[0]),int(rangePage[1]),path,WithWB)   
         wrong=False
     except ValueError:
         print("Typing mistake!")

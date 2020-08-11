@@ -73,26 +73,33 @@ def WorkBook(url,path='C:\\Users\\Nelusa\\Documents\\Uni\\Master\\HiWi\\CrawlerT
     driver.execute_script("arguments[0].style.visibility='hidden'", element)
     newFrame=driver.find_element_by_xpath('//*[@id="download-ToolbarButton"]')
     newFrame.click()
+    exists=False
     try:
+        #print(path+"\\"+titleName+".twbx")
+        for file in os.listdir(path):
+           if file.endswith('.twbx'):
+               exists=True
         #waitDownloadFrametoOpen
-        wait = WebDriverWait(newFrame, 20)
-        nex_t= wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="DownloadDialog-Dialog-Body-Id"]/div/button[6]')))
-        nex_t.click()
-        wait = WebDriverWait(driver, 20)
-        newFrame=wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="DownloadAsVersionDialog-Dialog-Body-Id"]/div/div[3]/button')))
-        newFrame.click()
- 
-        driver.switch_to_default_content
-        driver.refresh
+        if(not exists):
+            wait = WebDriverWait(newFrame, 20)
+            nex_t= wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="DownloadDialog-Dialog-Body-Id"]/div/button[6]')))
+            nex_t.click()
+            wait = WebDriverWait(driver, 20)
+            newFrame=wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="DownloadAsVersionDialog-Dialog-Body-Id"]/div/div[3]/button')))
+            newFrame.click()
+            
+            driver.switch_to_default_content
+    
+        #driver.refresh
     #for workbooks with no permission to download
     except:
         
         
         driver.switch_to_default_content
-        
-        driver.refresh
-    driver.quit    
-    driver.close        
+       
+    time.sleep(5)    
+    driver.quit()
+    
    
     
 #WorkBook('https://public.tableau.com/en-gb/gallery/access-water-and-sanitation-around-world?tab=viz-of-the-day&type=viz-of-the-day','C:\\Users\\Nelusa\\Documents\\Uni\\Master\\HiWi\\CrawlerTableau\\TableauCrawler\\WorkBooks')
