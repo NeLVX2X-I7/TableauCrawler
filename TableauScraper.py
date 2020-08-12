@@ -44,15 +44,25 @@ def crawlerTableauGallery(j,pages,path,WithWB):
           
             #loop through all images on a page
             for i in images:
+               
                container= i.find_element_by_class_name("gallery-list-item-container")   
                imagesrc=container.find_element_by_xpath('//*[@id="gallery-page-container"]/div/div/div[2]/section/div/ol/li['+str(c)+']/div/div[1]')
+              
                imgTitel=container.find_element_by_xpath('//*[@id="gallery-page-container"]/div/div/div[2]/section/div/ol/li['+str(c)+']/div/div/div[1]/div[1]/a').text
-               titleText=container.find_element_by_xpath('//*[@id="gallery-page-container"]/div/div/div[2]/section/div/ol/li['+str(c)+']/div/div/div[2]/div[1]/div[1]/p').text
-               referenceTag=imagesrc.find_element_by_xpath('//*[@id="gallery-page-container"]/div/div/div[2]/section/div/ol/li['+str(c)+']/div/div[1]/a')
-               reference=referenceTag.get_attribute('href')
-               image=imagesrc.find_element_by_tag_name('img')
-               imageFiles=image.get_attribute('src')
-               imageName=image.get_attribute('alt')
+               try: 
+                   titleText=container.find_element_by_xpath('//*[@id="gallery-page-container"]/div/div/div[2]/section/div/ol/li['+str(c)+']/div/div/div[2]/div[1]/div[1]/p').text
+               except:
+                   titleText="No Text"
+                   print("No such element!")
+               try:    
+                   referenceTag=imagesrc.find_element_by_xpath('//*[@id="gallery-page-container"]/div/div/div[2]/section/div/ol/li['+str(c)+']/div/div[1]/a')
+                   reference=referenceTag.get_attribute('href')
+                   image=imagesrc.find_element_by_tag_name('img')
+                   imageFiles=image.get_attribute('src')
+                   imageName=image.get_attribute('alt')
+               except:
+                   imageName="NoImage"
+                   print("No such element!")
                c+=1
                img_name=str(j)+'.'+str(c-1)
                #imageName=re.sub('[^a-zA-Z]+', '', imageName)
@@ -65,14 +75,16 @@ def crawlerTableauGallery(j,pages,path,WithWB):
                imageName=imageName.strip("*")
                imageName=imageName.strip("\\")
                imageName=imageName.strip("/")
+               imageName=imageName.replace(':',"")
            
                print(imageName)
-               full_name=imageName+".jpg"
+               full_name=imageName+".png"
                print(full_name)
               # img = Image.open(imageFiles)
                #img.save("C:\\Users\\Nelusa\\Documents\\Uni\\Master\\HiWi\\CrawlerTableau\\TableauCrawler\\" + img_name)
                try:
-                   os.mkdir(imageName)
+                   os.mkdir(path+"\\"+imageName)
+                   print(path+"\\"+imageName)
                    urllib.request.urlretrieve(imageFiles,path+'\\'+imageName+'\\'+full_name)  
                    save_path=path+"\\"+imageName
                    name_of_file=imageName
@@ -81,7 +93,7 @@ def crawlerTableauGallery(j,pages,path,WithWB):
                    file2write.write(img_name+':'+imgTitel+'\n')
                    file2write.write(titleText+'\n')    
                    file2write.close()
-               
+                   print("Current Page",j)
                    if(WithWB):
                        WorkBook(reference,save_path)
                    
@@ -118,6 +130,7 @@ def main():
             number=argv[i-1]
         elif(os.path.isdir(argv[i-1])):
             path=argv[i-1]
+            print("Directory")
         else:
             path=os.path.abspath(os.getcwd())
             #print(path)
@@ -146,7 +159,7 @@ def main():
             
             rangePage.insert(0,1)
             rangePage.append(10)
-        print("Page",rangePage[0],rangePage[1])    
+        print("Page",path)    
         crawlerTableauGallery(int(rangePage[0]),int(rangePage[1]),path,WithWB)   
         wrong=False
     except ValueError:
