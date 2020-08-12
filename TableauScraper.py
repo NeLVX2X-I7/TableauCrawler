@@ -3,7 +3,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jun  3 21:01:36 2020
-
 @author: Nelusa
 """
 import sys
@@ -83,10 +82,15 @@ def crawlerTableauGallery(j,pages,path,WithWB):
               # img = Image.open(imageFiles)
                #img.save("C:\\Users\\Nelusa\\Documents\\Uni\\Master\\HiWi\\CrawlerTableau\\TableauCrawler\\" + img_name)
                try:
-                   os.mkdir(path+"\\"+imageName)
-                   print(path+"\\"+imageName)
-                   urllib.request.urlretrieve(imageFiles,path+'\\'+imageName+'\\'+full_name)  
-                   save_path=path+"\\"+imageName
+                   p=os.path.join(path,imageName)
+                   print(p)
+                   #os.mkdir(path+"\\"+imageName)
+                   os.mkdir(p)
+                   print("direct",path+"\\"+imageName)
+                   p2=os.path.join(p, full_name)
+                   #urllib.request.urlretrieve(imageFiles,path+'\\'+imageName+'\\'+full_name)  
+                   urllib.request.urlretrieve(imageFiles,p2) 
+                   save_path=p
                    name_of_file=imageName
                    completeName = os.path.join(save_path, name_of_file+".txt")
                    file2write=open(completeName,'w')
@@ -133,7 +137,7 @@ def main():
             print("Directory")
         else:
             path=os.path.abspath(os.getcwd())
-            #print(path)
+            print("Path",path)
             number="10"
         
 
@@ -165,5 +169,4 @@ def main():
     except ValueError:
         print("Typing mistake!")
         
-main()           
-
+main() 
